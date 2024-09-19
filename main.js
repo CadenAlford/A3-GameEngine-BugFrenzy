@@ -10,16 +10,16 @@ window.onload = function() {
     // Event Listeners
     const keysPressed = {};
 
-    // Interpolation Rendering
+    // Interpolation Rendering Variables 
     const targetFPS = 120; 
     const frameDuration = 1000 / targetFPS; 
     const timeStep = 1000 / 60; 
     let accumulatedTime = 0;
     let lastFrameTime = performance.now();
     let lastRenderTime = 0;
-    let fps = 0; 
-    let frameCount = 0;
+    let fps = 0;
     let framesThisSecond = 0;
+    let gameRunning = false;
 
     // Game Score and Orbs
     let score = 0; 
@@ -27,6 +27,7 @@ window.onload = function() {
     const maxOrbs = 6; 
     const orbSpawnInterval = 4000;
     const orbs = []; 
+
 
     // Initialize ladybugs and grasshoppers
     let ladybugs = [new Ladybug(100, 100, 30, canvas, ctx)];
@@ -71,8 +72,18 @@ window.onload = function() {
             framesThisSecond++;
         }
 
-       
-        requestAnimationFrame(mainLoop);
+        if(gameRunning){
+            requestAnimationFrame(mainLoop);
+        }
+        else{
+            ctx.font = '30px Arial';
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'center';
+            ctx.fillText("Welcome to Bug Frenzy!", canvas.width/2 + 200, canvas.height/2);
+            ctx.font = '20px Arial';
+            ctx.fillText("Click Start to Play", canvas.width/2 + 200, canvas.height/2 + 30);
+
+        }
     }
 
     // Update Bugs
@@ -138,7 +149,28 @@ window.onload = function() {
         }
         score = 0;
         orbs.length = 0; 
+        gameRunning = false;
     }
+
+    document.getElementById("startButton").addEventListener("click", function() {
+        if(!gameRunning){
+            gameRunning = true;
+            grasshoppers = [
+                new Grasshopper(200, 400, 15, 30, 200, 200, canvas, ctx),
+                new Grasshopper(400, 300, 20, 30, 200, 200, canvas, ctx), 
+                new Grasshopper(250, 250, 20, 35, 200, 200, canvas, ctx)
+            ];
+        ladybugs.pop();
+        ladybugs.push(new Ladybug(100, 100, 30, canvas, ctx));
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        requestAnimationFrame(mainLoop);
+        }
+        else{
+            return
+        }
+    });
 
     // Event Listeners
     window.addEventListener('keydown', (e) => {
