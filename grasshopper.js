@@ -7,7 +7,7 @@ export class Grasshopper {
         this.speedX = speedX;
         this.speedY = speedY;
         this.jumpFactor = 1.5;
-        this.jumpSpeed = 0.01;
+        this.jumpSpeed = .7;
         this.rotationAngle = 0;
         this.canvas = canvas;
         this.ctx = ctx;
@@ -20,6 +20,16 @@ export class Grasshopper {
         this.prevY = this.y;
 
         this.move(deltaTime);
+        this.updateJump(deltaTime);  // New update for jump factor
+    }
+
+    updateJump(deltaTime) {
+        // Adjust jumpFactor based on deltaTime
+        this.jumpFactor += this.jumpSpeed * deltaTime;
+
+        if (this.jumpFactor > 1.5 || this.jumpFactor < 1) {
+            this.jumpSpeed *= -1;
+        }
     }
 
     draw(interpolationFactor) {
@@ -30,7 +40,7 @@ export class Grasshopper {
         this.ctx.save();
         this.ctx.translate(interpolatedX, interpolatedY);
         this.ctx.rotate(this.rotationAngle);
-        this.ctx.scale(this.jumpFactor, this.jumpFactor);
+        this.ctx.scale(this.jumpFactor, this.jumpFactor);  // Scaling with jumpFactor
 
         this.drawLegs();
         this.drawBody();
@@ -52,11 +62,6 @@ export class Grasshopper {
         }
 
         this.rotationAngle = Math.atan2(this.speedX, -this.speedY);
-
-        this.jumpFactor += this.jumpSpeed;
-        if (this.jumpFactor > 1.5 || this.jumpFactor < 1) {
-            this.jumpSpeed *= -1;
-        }
     }
 
     drawLegs() {
@@ -120,10 +125,6 @@ export class Grasshopper {
         this.ctx.fill();
     }
 
-    getX(){
-        return this.x;
-    }
-
     checkCollision(ladybug) {
         // Get the center of the ladybug and the orb
         const ladybugCenterX = ladybug.x;
@@ -146,4 +147,3 @@ export class Grasshopper {
         return false; // No collision
     }    
 }
-

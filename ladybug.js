@@ -1,5 +1,3 @@
-// Ladybug.js
-
 export class Ladybug {
     constructor(x, y, size, canvas, ctx) {
         this.x = x;
@@ -43,13 +41,11 @@ export class Ladybug {
         if (moveX !== 0 || moveY !== 0) {
             this.movementX = moveX;
             this.movementY = moveY;
-
             this.rotationAngle = Math.atan2(this.movementX, -this.movementY);
         }
 
-        
         // Update position based on movement
-        if(move == true){
+        if (move) {
             this.x += this.movementX * deltaTime;
             this.y += this.movementY * deltaTime;
         }
@@ -57,6 +53,14 @@ export class Ladybug {
         // Prevent ladybug from going out of bounds
         this.x = Math.max(this.size, Math.min(this.canvas.width - this.size, this.x));
         this.y = Math.max(this.size, Math.min(this.canvas.height - this.size, this.y));
+    }
+
+    updateWings(deltaTime) {
+        // Update the wing angle based on deltaTime
+        this.wingAngle += this.wingFlapSpeed * deltaTime * 60; // Scaling the flap speed with deltaTime
+        if (this.wingAngle > 1.4 || this.wingAngle < -1.55) {
+            this.wingFlapSpeed *= -1;
+        }
     }
 
     drawBody() {
@@ -132,11 +136,6 @@ export class Ladybug {
         const wingRadius = this.size * 1.2;
         const wingY = this.size * 0.7;
 
-        this.wingAngle += this.wingFlapSpeed;
-        if (this.wingAngle > 1.4 || this.wingAngle < -1.55) {
-            this.wingFlapSpeed *= -1;
-        }
-
         // Draw left wing
         this.ctx.save();
         this.ctx.translate(0, wingY);
@@ -183,5 +182,8 @@ export class Ladybug {
 
         // Handle input and update position
         this.handleInput(keysPressed, deltaTime);
+
+        // Update wing flapping
+        this.updateWings(deltaTime);
     }
 }
