@@ -7,4 +7,5 @@
 - User Input: WASD for movement of the ladybug
 - Interpolated Rendering
 - Collision on Grasshoppers
-- Gamification: Control the ladybug to collect the orbs and avoid the grasshoppers. 
+- Gamification: Control the ladybug to collect the orbs and avoid the grasshoppers.
+- ETC.
